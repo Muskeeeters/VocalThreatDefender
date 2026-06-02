@@ -1,0 +1,6 @@
+[2026-06-02 21:53:49,522] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-02 21:53:49,523] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-02 21:53:49,524] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-02 21:53:53,257] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-02 21:53:53,258] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-02 21:53:53,260] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
