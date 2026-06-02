@@ -1,31 +1,27 @@
-from transformers import pipeline
+def analyze_text_baseline(transcript):
+    """
+    A foundational text analyzer that flags high-risk vishing keywords.
+    """
+    # Convert text to lowercase so capitalization doesn't confuse our check
+    clean_text = transcript.lower()
+    
+    # Define simple lists of phrases phone scammers frequently use
+    urgency_keywords = ["immediately", "transfer now", "urgently", "account suspended"]
+    credential_keywords = ["password", "otp", "verification code", "pin number"]
+    
+    # Check if any scam phrases exist in the conversation text
+    has_urgency = any(word in clean_text for word in urgency_keywords)
+    has_credential_request = any(word in clean_text for word in credential_keywords)
+    
+    # If it contains scam phrases, mark it as suspicious
+    if has_urgency or has_credential_request:
+        return "WARNING: Suspicious Activity Detected"
+    
+    return "SAFE: Standard Conversation"
 
-class VishingTextClassifier:
-    def __init__(self):
-        # Utilizing a robust Zero-Shot classification pipeline to identify malicious intent instantly
-        self.classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
-        
-        # Security vectors targeted by phone scammers
-        self.threat_labels = [
-            "legitimate customer service", 
-            "urgent financial wire request", 
-            "credential harvesting or password request", 
-            "impersonation of authority or law enforcement"
-        ]
+# --- TEMPORARY TEST LINES ---
+test_call_1 = "Hey, are we still meeting up for lunch at the cafe today?"
+test_call_2 = "This is your bank! Give me your password and OTP immediately or your account is suspended!"
 
-    def analyze_transcript(self, text):
-        if not text.strip():
-            return {"intent": "silent/unknown", "threat_confidence": 0.0}
-            
-        res = self.classifier(text, self.threat_labels)
-        top_label = res['labels'][0]
-        top_score = res['scores'][0]
-        
-        # Calculate overall risk based on malicious categories
-        is_malicious = top_label != "legitimate customer service"
-        
-        return {
-            "dominant_intent": top_label,
-            "intent_confidence": float(top_score),
-            "is_malicious_intent": is_malicious
-        }
+print("Testing Call 1:", analyze_text_baseline(test_call_1))
+print("Testing Call 2:", analyze_text_baseline(test_call_2))
