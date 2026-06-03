@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoiceShield AI — Vishing Detection System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- ── Animated background grid ───────────────────────────────────────── -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- ── Top nav ────────────────────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-icon">⬡</span>
+      <span class="brand-name">VOICE<span class="accent">SHIELD</span> AI</span>
+    </div>
+    <div class="nav-status">
+      <span class="status-dot"></span>
+      <span class="status-text">SYSTEM ONLINE</span>
+    </div>
+    <div class="nav-meta">
+      <span id="nav-clock">--:--:--</span>
+    </div>
+  </nav>
+
+  <!-- ── Main layout ─────────────────────────────────────────────────────── -->
+  <main class="layout">
+
+    <!-- ══ LEFT PANEL — Input Modes ════════════════════════════════════════ -->
+    <section class="panel panel-input" aria-label="Input panel">
+
+      <div class="panel-header">
+        <h2 class="panel-title">THREAT INPUT</h2>
+        <span class="panel-subtitle">Select analysis mode</span>
+      </div>
+
+      <!-- Mode tabs -->
+      <div class="mode-tabs" role="tablist">
+        <button class="tab-btn active" data-tab="upload" role="tab" aria-selected="true">
+          <span class="tab-icon">↑</span> UPLOAD
+        </button>
+        <button class="tab-btn" data-tab="record" role="tab" aria-selected="false">
+          <span class="tab-icon">◉</span> RECORD
+        </button>
+        <button class="tab-btn" data-tab="transcript" role="tab" aria-selected="false">
+          <span class="tab-icon">≡</span> TRANSCRIPT
+        </button>
+      </div>
+
+      <!-- ── TAB: Upload ───────────────────────────────────────────────── -->
+      <div class="tab-content active" id="tab-upload" role="tabpanel">
+        <div class="upload-zone" id="upload-zone" tabindex="0"
+             role="button" aria-label="Upload audio file">
+          <div class="upload-icon">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M32 44V20M22 30l10-10 10 10"/>
+              <rect x="8" y="48" width="48" height="8" rx="2"/>
+              <path d="M8 40c0-4 3-7 7-7h2M56 40c0-4-3-7-7-7h-2"/>
+            </svg>
+          </div>
+          <p class="upload-label">DROP AUDIO FILE HERE</p>
+          <p class="upload-hint">or click to browse</p>
+          <p class="upload-formats">WAV · MP3 · OGG · WEBM · M4A · max 20 MB</p>
+          <input type="file" id="audio-file-input" accept=".wav,.mp3,.ogg,.webm,.m4a" hidden />
+        </div>
+        <div class="file-preview hidden" id="file-preview">
+          <div class="file-info">
+            <span class="file-icon">♫</span>
+            <div>
+              <p id="file-name" class="file-name"></p>
+              <p id="file-size" class="file-size"></p>
+            </div>
+            <button class="remove-btn" id="remove-file" aria-label="Remove file">✕</button>
+          </div>
+          <div class="waveform-bar" id="waveform-bar">
+            <div class="waveform-inner" id="waveform-inner"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: Record ───────────────────────────────────────────────── -->
+      <div class="tab-content" id="tab-record" role="tabpanel">
+        <div class="record-zone">
+          <div class="record-visualizer" id="record-visualizer">
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring delay-1"></div>
+            <div class="pulse-ring delay-2"></div>
+            <button class="record-btn" id="record-btn" aria-label="Start recording">
+              <span class="record-btn-inner" id="record-btn-inner">●</span>
+            </button>
+          </div>
+          <p class="record-status" id="record-status">PRESS TO RECORD</p>
+          <p class="record-timer" id="record-timer">00:00</p>
+          <div class="record-bars" id="record-bars">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="recorded-preview hidden" id="recorded-preview">
+          <div class="file-info">
+            <span class="file-icon">◉</span>
+            <div>
+              <p class="file-name">Recorded Audio</p>
+              <p id="recorded-duration" class="file-size"></p>
+            </div>
+            <button class="remove-btn" id="remove-recording" aria-label="Remove recording">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: Transcript ───────────────────────────────────────────── -->
+      <div class="tab-content" id="tab-transcript" role="tabpanel">
+        <div class="transcript-zone">
+          <label class="transcript-label" for="transcript-input">
+            PASTE CALL TRANSCRIPT
+          </label>
+          <textarea
+            id="transcript-input"
+            class="transcript-input"
+            placeholder="e.g. Your bank account has been suspended. Please share your OTP immediately to restore access..."
+            maxlength="5000"
+            spellcheck="false"
+          ></textarea>
+          <div class="transcript-footer">
+            <span id="char-count">0</span><span class="char-max"> / 5000</span>
+          </div>
+          <div class="sample-transcripts">
+            <p class="sample-label">QUICK TEST:</p>
+            <button class="sample-btn" data-sample="scam">
+              ⚠ Load Scam Sample
+            </button>
+            <button class="sample-btn" data-sample="safe">
+              ✓ Load Safe Sample
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Transcript overlay (shown with audio modes) ──────────────── -->
+      <div class="optional-transcript" id="optional-transcript">
+        <button class="optional-toggle" id="optional-toggle">
+          <span>+ ADD TRANSCRIPT</span>
+          <span class="optional-arrow">▼</span>
+        </button>
+        <div class="optional-body hidden" id="optional-body">
+          <textarea
+            id="optional-text"
+            class="transcript-input small"
+            placeholder="Optional: add transcript to improve accuracy..."
+            maxlength="5000"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- ── Analyze button ────────────────────────────────────────────── -->
+      <button class="analyze-btn" id="analyze-btn" disabled>
+        <span class="analyze-btn-text">ANALYZE THREAT</span>
+        <span class="analyze-btn-icon">▶</span>
+        <span class="analyze-loading hidden" id="analyze-loading">
+          <span class="dot-1">·</span><span class="dot-2">·</span><span class="dot-3">·</span>
+        </span>
+      </button>
+
+      <!-- ── Progress bar ──────────────────────────────────────────────── -->
+      <div class="progress-wrap hidden" id="progress-wrap">
+        <div class="progress-bar" id="progress-bar"></div>
+        <p class="progress-label" id="progress-label">INITIALISING...</p>
+      </div>
+
+    </section>
+
+    <!-- ══ RIGHT PANEL — Results ════════════════════════════════════════ -->
+    <section class="panel panel-results" aria-label="Results panel">
+
+      <div class="panel-header">
+        <h2 class="panel-title">THREAT ASSESSMENT</h2>
+        <span class="panel-subtitle">Real-time risk analysis</span>
+      </div>
+
+      <!-- Default idle state -->
+      <div class="idle-state" id="idle-state">
+        <div class="idle-icon">⬡</div>
+        <p class="idle-text">AWAITING ANALYSIS</p>
+        <p class="idle-hint">Submit audio or transcript to begin threat detection</p>
+      </div>
+
+      <!-- Results (hidden until analysis completes) -->
+      <div class="results-body hidden" id="results-body">
+
+        <!-- ── Verdict badge ────────────────────────────────────────── -->
+        <div class="verdict-section">
+          <div class="verdict-badge" id="verdict-badge">
+            <div class="verdict-label" id="verdict-label">--</div>
+            <div class="verdict-sub" id="verdict-sub">THREAT LEVEL</div>
+          </div>
+        </div>
+
+        <!-- ── Risk meter ───────────────────────────────────────────── -->
+        <div class="meter-section">
+          <div class="meter-header">
+            <span class="meter-title">RISK SCORE</span>
+            <span class="meter-value" id="meter-value">0%</span>
+          </div>
+          <div class="meter-track">
+            <div class="meter-fill" id="meter-fill" style="width:0%"></div>
+            <div class="meter-zones">
+              <span class="zone safe-zone">SAFE</span>
+              <span class="zone suspicious-zone">SUSPICIOUS</span>
+              <span class="zone critical-zone">CRITICAL</span>
+            </div>
+          </div>
+          <div class="meter-ticks">
+            <span>0</span><span>30</span><span>60</span><span>100</span>
+          </div>
+        </div>
+
+        <!-- ── Score cards ──────────────────────────────────────────── -->
+        <div class="score-cards">
+          <div class="score-card" id="card-audio">
+            <div class="card-icon">♫</div>
+            <div class="card-body">
+              <p class="card-label">AUDIO RISK</p>
+              <p class="card-value" id="audio-risk-val">—</p>
+            </div>
+            <div class="card-bar-wrap">
+              <div class="card-bar" id="audio-bar"></div>
+            </div>
+          </div>
+          <div class="score-card" id="card-text">
+            <div class="card-icon">≡</div>
+            <div class="card-body">
+              <p class="card-label">TEXT RISK</p>
+              <p class="card-value" id="text-risk-val">—</p>
+            </div>
+            <div class="card-bar-wrap">
+              <div class="card-bar" id="text-bar"></div>
+            </div>
+          </div>
+          <div class="score-card highlight" id="card-final">
+            <div class="card-icon">◈</div>
+            <div class="card-body">
+              <p class="card-label">FINAL SCORE</p>
+              <p class="card-value" id="final-score-val">—</p>
+            </div>
+            <div class="card-bar-wrap">
+              <div class="card-bar" id="final-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Recommendation box ───────────────────────────────────── -->
+        <div class="recommendation-box" id="recommendation-box">
+          <div class="rec-header">
+            <span class="rec-icon">!</span>
+            <span class="rec-title">RECOMMENDATION</span>
+          </div>
+          <p class="rec-text" id="rec-text"></p>
+        </div>
+
+        <!-- ── Meta info ────────────────────────────────────────────── -->
+        <div class="meta-row">
+          <span class="meta-item">⏱ <span id="proc-time">—</span> ms</span>
+          <span class="meta-item">🕐 <span id="analysis-time">—</span></span>
+        </div>
+
+        <!-- ── Re-analyze button ────────────────────────────────────── -->
+        <button class="reanalyze-btn" id="reanalyze-btn">
+          ↺ NEW ANALYSIS
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <span>VOICESHIELD AI © 2025</span>
+    <span class="footer-sep">|</span>
+    <span>AI-Powered Vishing Detection</span>
+    <span class="footer-sep">|</span>
+    <a href="/api/health/" class="footer-link" target="_blank">API STATUS</a>
+    <span class="footer-sep">|</span>
+    <a href="/admin/" class="footer-link" target="_blank">ADMIN</a>
+  </footer>
+
+  <script src="/static/js/script.js"></script>
+</body>
+</html>

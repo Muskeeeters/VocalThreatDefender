@@ -57,7 +57,7 @@ class VerdictEngine:
         self._safe_max = safe_max
         self._suspicious_max = suspicious_max
         logger.info(
-            "VerdictEngine initialised — thresholds: SAFE≤%d | SUSPICIOUS≤%d | CRITICAL>%d",
+            "VerdictEngine initialised - thresholds: SAFE<=%d | SUSPICIOUS<=%d | CRITICAL>%d",
             safe_max,
             suspicious_max,
             suspicious_max,
