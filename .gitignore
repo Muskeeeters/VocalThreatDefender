@@ -1,1 +1,5 @@
 venv/
+# Ignore Dataset Folders
+data_pipeline/raw_dataset/*
+data_pipeline/processed_dataset/safe_human/*
+data_pipeline/processed_dataset/malicious_ai/*
