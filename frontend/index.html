@@ -3,133 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VishiGuard - Live Call Monitor</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>VoiceShield AI - Vishing Detector</title>
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body class="bg-gray-900 text-white font-sans p-6">
+<body>
+    <div class="app-wrapper">
+        <header class="site-header">
+            <div class="logo-block">
+                <div class="logo-text">Voice<span>Shield</span> AI</div>
+                <div class="logo-sub">Threat Detection Engine</div>
+            </div>
+            <div class="header-status">
+                <div class="status-dot"></div> System Active
+            </div>
+        </header>
 
-    <header class="flex justify-between items-center border-b border-gray-700 pb-4 mb-6">
-        <div>
-            <h1 class="text-3xl font-bold text-blue-400">🛡️ VishiGuard</h1>
-            <p class="text-gray-400 text-sm mt-1">Real-time Vishing & Deepfake Detection Engine</p>
+        <div class="mode-tabs">
+            <button class="mode-tab active" data-mode="upload">Upload Audio</button>
+            <button class="mode-tab" data-mode="record">Record Mic</button>
+            <button class="mode-tab" data-mode="transcript">Paste Transcript</button>
         </div>
-        <div class="flex items-center space-x-2">
-            <span class="relative flex h-3 w-3">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-            </span>
-            <span class="text-green-400 text-sm font-semibold">System Active</span>
-        </div>
-    </header>
 
-    <main class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="input-panel active" data-panel="upload">
+            <div class="section-label">Audio Source</div>
+            <div class="upload-zone" id="upload-zone">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                </div>
+                <h3>Drag & Drop or Click to Upload</h3>
+                <p>Supports .wav, .mp3, .ogg (Max 20MB)</p>
+                <input type="file" id="audio-file-input" accept=".wav,.mp3,.ogg,.webm,.m4a">
+            </div>
+            <div class="file-selected" id="file-selected" style="flex-direction: column; gap: 12px;">
+                <span id="file-name">No file selected</span>
+                <audio controls id="upload-audio-player" style="display: none; width: 100%; height: 35px;"></audio>
+            </div>
+        </div>
+
+        <div class="input-panel" data-panel="record">
+            <div class="section-label">Live Recording</div>
+            <div class="record-panel">
+                <div class="record-visualizer">
+                    <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+                </div>
+                <div class="record-controls">
+                    <button class="btn-record" id="btn-record">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle></svg>
+                    </button>
+                    <button class="btn-stop" id="btn-stop" disabled>
+                        <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"></rect></svg>
+                    </button>
+                </div>
+                <div class="record-status" id="record-status">Ready to record</div>
+                <div class="audio-playback" id="audio-playback">
+                    <audio controls id="audio-player"></audio>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-panel" data-panel="transcript">
+            <div class="section-label">Call Transcript</div>
+            <div class="transcript-area">
+                <textarea id="transcript-text" placeholder="Paste the suspicious call transcript here..."></textarea>
+                <div class="transcript-meta">
+                    <span>Text Analysis Mode</span>
+                    <span class="char-counter" id="char-counter">0 / 5000</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="analyze-section">
+            <button class="btn-analyze" id="btn-analyze">
+                <span id="btn-label">Run Analysis</span>
+                <div class="spinner" id="spinner"></div>
+            </button>
+            <div class="progress-track" id="progress-track">
+                <div class="progress-fill" id="progress-fill"></div>
+                <div class="progress-label" id="progress-label"></div>
+            </div>
+        </div>
+
+        <div id="results-section">
+            <div class="verdict-banner" id="verdict-banner">
+                <div class="verdict-left">
+                    <div class="verdict-label">System Verdict</div>
+                    <div class="verdict-title" id="verdict-title">--</div>
+                    <div class="verdict-rec" id="verdict-rec">--</div>
+                </div>
+                <div class="verdict-score-display">
+                    <div class="score-number" id="score-number">0</div>
+                    <div class="score-sub">Threat Level</div>
+                </div>
+            </div>
+
+            <div class="risk-meter-wrap">
+                <div class="risk-meter-header">
+                    <span>Safe</span>
+                    <span id="risk-pct-label">0%</span>
+                    <span>Critical</span>
+                </div>
+                <div class="risk-track">
+                    <div class="risk-fill" id="risk-fill"></div>
+                </div>
+            </div>
+
+            <div class="score-cards">
+                <div class="score-card" id="audio-risk-card">
+                    <div class="score-card-label">Audio Anomalies</div>
+                    <div class="score-card-value" id="audio-risk-val">0</div>
+                    <div class="score-card-bar" id="audio-risk-bar"></div>
+                </div>
+                <div class="score-card" id="text-risk-card">
+                    <div class="score-card-label">NLP Intent Risk</div>
+                    <div class="score-card-value" id="text-risk-val">0</div>
+                    <div class="score-card-bar" id="text-risk-bar"></div>
+                </div>
+            </div>
+            
+            <div class="proc-info">Processing Time: <span id="proc-time">--</span></div>
+        </div>
         
-        <div class="md:col-span-2 space-y-6">
-            
-            <div id="status-banner" class="bg-gray-800 border-l-4 border-gray-500 p-6 rounded shadow-lg transition-all duration-500">
-                <h2 class="text-sm text-gray-400 uppercase tracking-wide">Current Call Status</h2>
-                <p id="status-text" class="text-4xl font-black mt-2 text-gray-300">WAITING FOR CALL...</p>
-            </div>
-
-            <div class="bg-gray-800 p-6 rounded shadow-lg">
-                <h3 class="text-lg font-semibold mb-4 text-gray-300">Live Danger Score</h3>
-                <div class="w-full bg-gray-700 rounded-full h-8 mb-2">
-                    <div id="risk-bar" class="bg-blue-500 h-8 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                </div>
-                <div class="flex justify-between text-sm font-bold text-gray-400">
-                    <span>0% (Safe)</span>
-                    <span id="risk-percentage" class="text-white text-xl">0%</span>
-                    <span>100% (Critical)</span>
-                </div>
-            </div>
-
-            <div class="bg-gray-800 p-6 rounded shadow-lg h-48 overflow-y-auto">
-                <h3 class="text-lg font-semibold mb-2 text-gray-300">Live Transcript</h3>
-                <p id="transcript-box" class="text-gray-400 italic">Listening for audio stream...</p>
-            </div>
+        <div class="toast" id="error-toast">
+            <span id="toast-msg">Error occurred</span>
         </div>
+    </div>
 
-        <div class="space-y-6">
-            <div class="bg-gray-800 p-6 rounded shadow-lg h-full">
-                <h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-4 text-gray-300">AI Engine Logs</h3>
-                <ul class="text-sm space-y-3 text-gray-400 font-mono" id="ai-logs">
-                    <li>> System initialized...</li>
-                    <li>> Awaiting audio chunks...</li>
-                </ul>
-            </div>
-        </div>
-    </main>
-<script>
-        // UI Elements ko select karna
-        const riskBar = document.getElementById('risk-bar');
-        const riskPercentage = document.getElementById('risk-percentage');
-        const statusBanner = document.getElementById('status-banner');
-        const statusText = document.getElementById('status-text');
-        const transcriptBox = document.getElementById('transcript-box');
-        const aiLogs = document.getElementById('ai-logs');
-
-        // Function: Dashboard update karna
-        function updateVishiGuardUI(data) {
-            // 1. Update Transcript & Logs
-            transcriptBox.innerHTML += `<br><span class="text-white">Caller:</span> ${data.transcript_chunk}`;
-            transcriptBox.scrollTop = transcriptBox.scrollHeight; // Auto-scroll down
-            
-            const newLog = document.createElement('li');
-            newLog.innerText = `> ${data.log_msg}`;
-            aiLogs.appendChild(newLog);
-
-            // 2. Update Risk Meter
-            riskPercentage.innerText = `${data.risk_score}%`;
-            riskBar.style.width = `${data.risk_score}%`;
-
-            // 3. Update Colors based on Threat Level
-            if (data.status === "SAFE") {
-                riskBar.className = "bg-green-500 h-8 rounded-full transition-all duration-1000";
-                statusBanner.className = "bg-green-900 border-l-4 border-green-500 p-6 rounded shadow-lg transition-all duration-500";
-                statusText.className = "text-4xl font-black mt-2 text-green-400";
-                statusText.innerText = "SAFE: No Threat Detected";
-            } 
-            else if (data.status === "WARNING_SUSPICIOUS") {
-                riskBar.className = "bg-yellow-500 h-8 rounded-full transition-all duration-1000";
-                statusBanner.className = "bg-yellow-900 border-l-4 border-yellow-500 p-6 rounded shadow-lg transition-all duration-500";
-                statusText.className = "text-4xl font-black mt-2 text-yellow-400";
-                statusText.innerText = "WARNING: SUSPICIOUS";
-            } 
-            else if (data.status === "CRITICAL_CRIME") {
-                riskBar.className = "bg-red-500 animate-pulse h-8 rounded-full transition-all duration-1000";
-                statusBanner.className = "bg-red-900 border-l-4 border-red-500 p-6 rounded shadow-lg animate-pulse transition-all duration-500";
-                statusText.className = "text-4xl font-black mt-2 text-red-400";
-                statusText.innerText = "CRITICAL: SCAM DETECTED!";
-            }
-        }
-
-        // --- TEST SIMULATION: Har 3 second baad naya data aayega ---
-        setTimeout(() => {
-            updateVishiGuardUI({
-                risk_score: 15, 
-                status: "SAFE", 
-                transcript_chunk: "Hello? Is this Haleema?", 
-                log_msg: "Acoustic profile matches normal human voice."
-            });
-        }, 2000);
-
-        setTimeout(() => {
-            updateVishiGuardUI({
-                risk_score: 45, 
-                status: "WARNING_SUSPICIOUS", 
-                transcript_chunk: "I am calling from your bank. There is an issue.", 
-                log_msg: "NLP Alert: 'Bank' and 'Issue' detected. Intent suspicious."
-            });
-        }, 6000);
-
-        setTimeout(() => {
-            updateVishiGuardUI({
-                risk_score: 92, 
-                status: "CRITICAL_CRIME", 
-                transcript_chunk: "Your account is frozen. Please share your PIN immediately to unlock it.", 
-                log_msg: "CRITICAL: Urgent credential request detected. High risk of Vishing!"
-            });
-        }, 10000);
-    </script>
+    <script src="/static/js/script.js"></script>
 </body>
 </html>

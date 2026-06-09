@@ -168,6 +168,9 @@ function handleFileSelected(file) {
   selectedFile = file;
   DOM.fileName.textContent = `${file.name}  (${formatBytes(file.size)})`;
   DOM.fileSelected.classList.add("visible");
+  const uploadPlayer = document.getElementById("upload-audio-player");
+  uploadPlayer.src = URL.createObjectURL(file);
+  uploadPlayer.style.display = "block";
 }
 
 /* ══════════════════════════════════════════════════════════════

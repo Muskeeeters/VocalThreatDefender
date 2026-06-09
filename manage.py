@@ -1,14 +1,5 @@
-#!/usr/bin/env python
-"""
-manage.py
-=========
-Django's command-line utility for administrative tasks.
-"""
-
 import os
 import sys
-
-
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "voiceshield.settings")
@@ -21,7 +12,5 @@ def main():
             "a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
-
-
 if __name__ == "__main__":
     main()

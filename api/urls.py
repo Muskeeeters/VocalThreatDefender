@@ -12,9 +12,7 @@ GET  /api/history/    → recent analysis records
 
 from django.urls import path
 from .views import AnalyzeView, HealthView, HistoryView
-
 app_name = "api"
-
 urlpatterns = [
     path("analyze/", AnalyzeView.as_view(), name="analyze"),
     path("health/", HealthView.as_view(), name="health"),

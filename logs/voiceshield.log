@@ -104,3 +104,54 @@ django.template.exceptions.TemplateDoesNotExist: index.html
 [2026-06-03 05:38:52,401] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
 [2026-06-03 05:38:52,402] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
 [2026-06-03 05:38:52,403] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 01:25:56,221] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 01:25:56,288] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-10 01:25:56,293] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 01:25:56,295] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 01:26:12,305] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 01:26:12,309] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-10 01:26:12,311] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 01:26:12,333] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 01:26:32,662] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 01:26:32,665] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-10 01:26:32,668] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 01:26:32,671] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 01:26:51,608] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 01:26:51,611] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-10 01:26:51,613] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 01:26:51,620] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 01:27:47,120] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 01:27:47,125] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-10 01:27:47,129] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 01:27:47,136] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 01:28:40,734] WARNING django.request — Not Found: /favicon.ico
+[2026-06-10 01:28:40,749] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 2860
+[2026-06-10 01:34:52,449] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 01:34:52,452] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-10 01:34:52,469] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 01:34:52,477] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 01:35:36,119] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 01:35:36,122] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-10 01:35:36,126] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 01:35:36,132] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 01:43:33,025] WARNING django.request — Not Found: /favicon.ico
+[2026-06-10 01:43:33,075] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 2860
+[2026-06-10 01:43:39,364] DEBUG api.serializers — Audio file validated: 1.mp3 (1262356 bytes)
+[2026-06-10 01:43:39,376] INFO api.views — Analysis request — has_audio=True, has_text=False, ip=127.0.0.1
+[2026-06-10 01:43:39,477] DEBUG core_ai.audio_analyzer — Loading audio: tmpvgbtekq1.mp3
+[2026-06-10 01:48:35,658] DEBUG core_ai.audio_analyzer — Loaded: 78.17 seconds at 16000 Hz
+[2026-06-10 01:50:06,553] INFO core_ai.audio_analyzer — Audio risk score: 0.2614 (file=tmpvgbtekq1.mp3)
+[2026-06-10 01:50:06,554] INFO api.views — Audio risk score: 0.2614
+[2026-06-10 01:50:06,605] DEBUG api.views — Temp file removed: D:\repo clones\VocalThreatDefender\media\uploads\tmpvgbtekq1.mp3
+[2026-06-10 01:50:06,837] INFO core_ai.verdict — Verdict: SAFE (score=26%)
+[2026-06-10 01:50:07,196] INFO api.views — Analysis complete — score=26% verdict=SAFE time=388507ms
+[2026-06-10 02:43:56,566] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 02:43:56,569] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 02:43:56,629] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-10 02:43:56,633] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli (lazy load)
+[2026-06-10 02:43:56,637] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 02:43:56,640] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 02:44:42,600] WARNING django.request — Not Found: /favicon.ico
+[2026-06-10 02:44:42,643] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 2860
+[2026-06-10 02:45:11,307] INFO api.views — Analysis request — has_audio=False, has_text=True, ip=127.0.0.1
+[2026-06-10 02:45:11,309] INFO core_ai.text_analyzer — Loading NLP model: facebook/bart-large-mnli …
