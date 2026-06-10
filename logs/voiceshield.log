@@ -155,3 +155,52 @@ django.template.exceptions.TemplateDoesNotExist: index.html
 [2026-06-10 02:44:42,643] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 2860
 [2026-06-10 02:45:11,307] INFO api.views — Analysis request — has_audio=False, has_text=True, ip=127.0.0.1
 [2026-06-10 02:45:11,309] INFO core_ai.text_analyzer — Loading NLP model: facebook/bart-large-mnli …
+[2026-06-10 02:55:58,150] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 02:55:58,154] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli
+[2026-06-10 02:55:58,163] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 02:55:58,169] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 02:56:45,473] WARNING django.request — Not Found: /favicon.ico
+[2026-06-10 02:56:45,479] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 2860
+[2026-06-10 02:56:57,157] INFO api.views — 
+============================================================
+[2026-06-10 02:56:57,571] INFO api.views — ============================================================
+[2026-06-10 02:56:57,575] INFO api.views — [+] Connection securely established from IP: 127.0.0.1
+[2026-06-10 02:56:57,583] INFO api.views — [+] Payload specs — Audio Attached: False | Transcript Attached: True
+[2026-06-10 02:56:57,585] INFO api.views — 
+>>> STEP 2: INITIALIZING NLP THREAT DETECTION
+[2026-06-10 02:56:57,589] INFO api.views —     [+] Routing transcript to TextRiskAnalyzer...
+[2026-06-10 02:56:57,599] INFO core_ai.text_analyzer —     [~] Target sequence parsed. Waking up NLP Pipeline (facebook/bart-large-mnli)...
+[2026-06-10 03:03:03,119] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-10 03:03:03,131] WARNING huggingface_hub.utils._http — Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[2026-06-10 03:03:03,195] INFO httpx — HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/config.json "HTTP/1.1 200 OK"
+[2026-06-10 03:03:03,258] INFO httpx — HTTP Request: GET https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/config.json "HTTP/1.1 200 OK"
+[2026-06-10 03:03:05,007] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/model.safetensors "HTTP/1.1 302 Found"
+[2026-06-10 03:03:06,235] INFO httpx — HTTP Request: GET https://huggingface.co/api/models/facebook/bart-large-mnli/xet-read-token/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce "HTTP/1.1 200 OK"
+[2026-06-10 03:08:02,057] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-10 03:08:02,113] INFO httpx — HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-10 03:08:02,173] INFO httpx — HTTP Request: GET https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-10 03:08:02,900] INFO httpx — HTTP Request: GET https://huggingface.co/api/models/facebook/bart-large-mnli/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+[2026-06-10 03:08:03,190] INFO httpx — HTTP Request: GET https://huggingface.co/api/models/facebook/bart-large-mnli/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+[2026-06-10 03:08:03,468] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/vocab.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-10 03:08:03,525] INFO httpx — HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/vocab.json "HTTP/1.1 200 OK"
+[2026-06-10 03:08:03,594] INFO httpx — HTTP Request: GET https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/vocab.json "HTTP/1.1 200 OK"
+[2026-06-10 03:08:04,070] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/merges.txt "HTTP/1.1 307 Temporary Redirect"
+[2026-06-10 03:08:04,136] INFO httpx — HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/merges.txt "HTTP/1.1 200 OK"
+[2026-06-10 03:08:04,202] INFO httpx — HTTP Request: GET https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/merges.txt "HTTP/1.1 200 OK"
+[2026-06-10 03:08:04,536] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/tokenizer.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-10 03:08:04,590] INFO httpx — HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/tokenizer.json "HTTP/1.1 200 OK"
+[2026-06-10 03:08:04,644] INFO httpx — HTTP Request: GET https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/tokenizer.json "HTTP/1.1 200 OK"
+[2026-06-10 03:08:04,986] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/added_tokens.json "HTTP/1.1 404 Not Found"
+[2026-06-10 03:08:05,274] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/special_tokens_map.json "HTTP/1.1 404 Not Found"
+[2026-06-10 03:08:05,539] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/chat_template.jinja "HTTP/1.1 404 Not Found"
+[2026-06-10 03:08:11,956] INFO core_ai.text_analyzer —     [+] Pipeline active! Cross-referencing 7 known cybercrime vectors...
+[2026-06-10 03:08:47,175] INFO core_ai.text_analyzer —     [!] NLP Primary Match: 'BANK FRAUD' (Confidence: 0.66)
+[2026-06-10 03:08:47,176] INFO api.views —     [!] NLP INTENT RISK EVALUATION: 93.23%
+[2026-06-10 03:08:47,177] INFO api.views — 
+>>> STEP 3: FUSING MULTI-MODAL METRICS
+[2026-06-10 03:08:47,205] INFO api.views —     [+] Score Fusion Engine returned normalized threat value: 93%
+[2026-06-10 03:08:47,206] INFO core_ai.verdict — Verdict: CRITICAL FRAUD (score=93%)
+[2026-06-10 03:08:47,587] INFO api.views —     [+] Forensics data committed to audit log.
+[2026-06-10 03:08:47,588] INFO api.views — ============================================================
+[2026-06-10 03:08:47,598] INFO api.views — ============================================================
+

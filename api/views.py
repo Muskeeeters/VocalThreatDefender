@@ -49,20 +49,14 @@ def _get_client_ip(request) -> str | None:
 
 
 class AnalyzeView(APIView):
-    """
-    POST /api/analyze/
-
-    Accepts multipart/form-data with optional fields:
-      - audio_file  : .wav / .mp3 audio
-      - transcript  : plain-text call transcript
-
-    Returns a JSON risk assessment.
-    """
-
     parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def post(self, request, *args, **kwargs):
         start_time = time.perf_counter()
+
+        logger.info("\n" + "="*60)
+        logger.info("🛡️  VOICESHIELD AI — NEW THREAT ANALYSIS INITIATED")
+        logger.info("="*60)
 
         # ── 1. Validate input ─────────────────────────────────────────────────
         serializer = AnalysisRequestSerializer(data=request.data)
@@ -77,12 +71,8 @@ class AnalyzeView(APIView):
         audio_file = validated.get("audio_file")
         transcript = validated.get("transcript", "").strip()
 
-        logger.info(
-            "Analysis request — has_audio=%s, has_text=%s, ip=%s",
-            bool(audio_file),
-            bool(transcript),
-            _get_client_ip(request),
-        )
+        logger.info(f"[+] Connection securely established from IP: {_get_client_ip(request)}")
+        logger.info(f"[+] Payload specs — Audio Attached: {bool(audio_file)} | Transcript Attached: {bool(transcript)}")
 
         # ── 2. Audio analysis ─────────────────────────────────────────────────
         audio_risk_score: float | None = None
@@ -90,9 +80,9 @@ class AnalyzeView(APIView):
         tmp_path: str | None = None
 
         if audio_file:
+            logger.info("\n>>> STEP 1: INITIALIZING AUDIO FORENSICS ENGINE")
             audio_filename = audio_file.name
             try:
-                # Write to a temp file so Librosa can read it
                 suffix = Path(audio_file.name).suffix.lower() or ".wav"
                 with tempfile.NamedTemporaryFile(
                     delete=False,
@@ -103,9 +93,12 @@ class AnalyzeView(APIView):
                         tmp.write(chunk)
                     tmp_path = tmp.name
 
+                logger.info(f"    [+] Audio stream saved to secure vault: {audio_filename}")
+                logger.info("    [+] Routing stream to Librosa AudioRiskAnalyzer...")
+                
                 result = _audio_analyzer.analyze(tmp_path)
                 audio_risk_score = result["audio_risk"]
-                logger.info("Audio risk score: %.4f", audio_risk_score)
+                logger.info(f"    [!] AUDIO RISK EVALUATION: {audio_risk_score * 100:.2f}%")
 
             except Exception as exc:
                 logger.error("Audio analysis failed: %s", exc, exc_info=True)
@@ -114,11 +107,9 @@ class AnalyzeView(APIView):
                     status=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 )
             finally:
-                # Always clean up temp file
                 if tmp_path and os.path.exists(tmp_path):
                     try:
                         os.remove(tmp_path)
-                        logger.debug("Temp file removed: %s", tmp_path)
                     except OSError as e:
                         logger.warning("Could not remove temp file %s: %s", tmp_path, e)
 
@@ -126,10 +117,12 @@ class AnalyzeView(APIView):
         text_risk_score: float | None = None
 
         if transcript:
+            logger.info("\n>>> STEP 2: INITIALIZING NLP THREAT DETECTION")
             try:
+                logger.info("    [+] Routing transcript to TextRiskAnalyzer...")
                 result = _text_analyzer.analyze(transcript)
                 text_risk_score = result["text_risk"]
-                logger.info("Text risk score: %.4f", text_risk_score)
+                logger.info(f"    [!] NLP INTENT RISK EVALUATION: {text_risk_score * 100:.2f}%")
             except Exception as exc:
                 logger.error("Text analysis failed: %s", exc, exc_info=True)
                 return Response(
@@ -138,12 +131,14 @@ class AnalyzeView(APIView):
                 )
 
         # ── 4. Score fusion ───────────────────────────────────────────────────
+        logger.info("\n>>> STEP 3: FUSING MULTI-MODAL METRICS")
         try:
             fused = _fusion_engine.fuse(
                 audio_risk=audio_risk_score,
                 text_risk=text_risk_score,
             )
             final_score = fused["final_score"]
+            logger.info(f"    [+] Score Fusion Engine returned normalized threat value: {final_score}%")
         except Exception as exc:
             logger.error("Score fusion failed: %s", exc, exc_info=True)
             return Response(
@@ -169,8 +164,8 @@ class AnalyzeView(APIView):
                 processing_ms=processing_ms,
                 ip_address=_get_client_ip(request),
             )
+            logger.info("    [+] Forensics data committed to audit log.")
         except Exception as exc:
-            # Non-fatal — log but don't fail the response
             logger.error("Failed to persist analysis record: %s", exc, exc_info=True)
 
         # ── 7. Build & return response ────────────────────────────────────────
@@ -183,12 +178,9 @@ class AnalyzeView(APIView):
             "processing_ms": processing_ms,
         }
 
-        logger.info(
-            "Analysis complete — score=%d%% verdict=%s time=%dms",
-            final_score,
-            verdict_data["verdict"],
-            processing_ms,
-        )
+        logger.info("="*60)
+        logger.info(f"🏁 ANALYSIS COMPLETE | VERDICT: {verdict_data['verdict']} | TIME: {processing_ms}ms")
+        logger.info("="*60 + "\n")
 
         response_serializer = AnalysisResponseSerializer(data=payload)
         response_serializer.is_valid(raise_exception=True)
@@ -196,31 +188,10 @@ class AnalyzeView(APIView):
 
 
 class HealthView(APIView):
-    """
-    GET /api/health/
-
-    Liveness probe for load balancers and monitoring tools.
-    Returns 200 OK with basic system status.
-    """
-
     def get(self, request, *args, **kwargs):
-        return Response(
-            {
-                "status": "ok",
-                "service": "VoiceShield AI",
-                "version": "1.0.0",
-            },
-            status=status.HTTP_200_OK,
-        )
-
+        return Response({"status": "ok", "service": "VoiceShield AI", "version": "1.0.0"}, status=status.HTTP_200_OK)
 
 class HistoryView(APIView):
-    """
-    GET /api/history/
-
-    Returns the last 20 analysis records (newest first).
-    """
-
     def get(self, request, *args, **kwargs):
         records = AnalysisRecord.objects.all()[:20]
         serializer = AnalysisRecordSerializer(records, many=True)
