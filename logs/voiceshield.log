@@ -204,3 +204,33 @@ django.template.exceptions.TemplateDoesNotExist: index.html
 [2026-06-10 03:08:47,588] INFO api.views — ============================================================
 [2026-06-10 03:08:47,598] INFO api.views — ============================================================
 
+[2026-06-10 09:37:11,611] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 09:37:11,657] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli
+[2026-06-10 09:37:11,665] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 09:37:11,670] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 09:39:39,890] WARNING django.request — Not Found: /favicon.ico
+[2026-06-10 09:39:39,918] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 2860
+[2026-06-10 09:41:27,515] INFO api.views — 
+============================================================
+[2026-06-10 09:41:29,717] INFO api.views — ============================================================
+[2026-06-10 09:41:29,858] INFO api.views — [+] Connection securely established from IP: 127.0.0.1
+[2026-06-10 09:41:29,886] INFO api.views — [+] Payload specs — Audio Attached: False | Transcript Attached: True
+[2026-06-10 09:41:29,898] INFO api.views — 
+>>> STEP 2: INITIALIZING NLP THREAT DETECTION
+[2026-06-10 09:41:29,917] INFO api.views —     [+] Routing transcript to TextRiskAnalyzer...
+[2026-06-10 09:41:29,937] INFO core_ai.text_analyzer —     [~] Target sequence parsed. Waking up NLP Pipeline (facebook/bart-large-mnli)...
+[2026-06-10 09:47:47,459] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-10 09:47:47,511] INFO httpx — HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/config.json "HTTP/1.1 200 OK"
+[2026-06-10 09:47:57,251] INFO httpx — HTTP Request: GET https://huggingface.co/api/models/facebook/bart-large-mnli/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+[2026-06-10 09:47:57,530] INFO httpx — HTTP Request: GET https://huggingface.co/api/models/facebook/bart-large-mnli/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+[2026-06-10 09:47:59,019] INFO core_ai.text_analyzer —     [+] Pipeline active! Cross-referencing 7 known cybercrime vectors...
+[2026-06-10 09:48:26,673] INFO core_ai.text_analyzer —     [!] NLP Primary Match: 'URGENT PAYMENT REQUEST' (Confidence: 0.72)
+[2026-06-10 09:48:26,675] INFO api.views —     [!] NLP INTENT RISK EVALUATION: 84.36%
+[2026-06-10 09:48:26,676] INFO api.views — 
+>>> STEP 3: FUSING MULTI-MODAL METRICS
+[2026-06-10 09:48:26,965] INFO api.views —     [+] Score Fusion Engine returned normalized threat value: 84%
+[2026-06-10 09:48:27,013] INFO core_ai.verdict — Verdict: CRITICAL FRAUD (score=84%)
+[2026-06-10 09:48:28,245] INFO api.views —     [+] Forensics data committed to audit log.
+[2026-06-10 09:48:28,246] INFO api.views — ============================================================
+[2026-06-10 09:48:28,258] INFO api.views — ============================================================
+
