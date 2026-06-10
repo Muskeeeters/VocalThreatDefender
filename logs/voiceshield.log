@@ -234,3 +234,180 @@ django.template.exceptions.TemplateDoesNotExist: index.html
 [2026-06-10 09:48:28,246] INFO api.views — ============================================================
 [2026-06-10 09:48:28,258] INFO api.views — ============================================================
 
+[2026-06-10 10:23:55,900] INFO core_ai.audio_analyzer — AudioRiskAnalyzer initialised (target_sr=16000 Hz)
+[2026-06-10 10:23:55,906] INFO core_ai.text_analyzer — TextRiskAnalyzer initialised — model=facebook/bart-large-mnli
+[2026-06-10 10:23:55,915] INFO core_ai.fusion_engine — ScoreFusionEngine initialised — text_weight=0.60, audio_weight=0.40
+[2026-06-10 10:23:55,929] INFO core_ai.verdict — VerdictEngine initialised - thresholds: SAFE<=30 | SUSPICIOUS<=60 | CRITICAL>60
+[2026-06-10 10:24:45,408] WARNING django.request — Not Found: /favicon.ico
+[2026-06-10 10:24:45,414] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 2860
+[2026-06-10 10:25:39,344] INFO api.views — 
+============================================================
+[2026-06-10 10:25:39,627] INFO api.views — ============================================================
+[2026-06-10 10:25:39,703] DEBUG api.serializers — Audio file validated: 1.mp3 (1262356 bytes)
+[2026-06-10 10:25:39,706] INFO api.views — [+] Connection securely established from IP: 127.0.0.1
+[2026-06-10 10:25:39,708] INFO api.views — [+] Payload specs — Audio Attached: True | Transcript Attached: False
+[2026-06-10 10:25:39,722] INFO api.views — 
+>>> STEP 1: INITIALIZING AUDIO FORENSICS ENGINE
+[2026-06-10 10:25:39,775] INFO api.views —     [+] Audio stream saved to secure vault: 1.mp3
+[2026-06-10 10:25:39,777] INFO api.views —     [+] Routing stream to Librosa AudioRiskAnalyzer...
+[2026-06-10 10:25:39,916] INFO core_ai.audio_analyzer —     [~] Resampling audio stream to 16,000 Hz telephony standard...
+[2026-06-10 10:26:38,933] INFO core_ai.audio_analyzer —     [~] Stream successfully captured: 78.17 seconds.
+[2026-06-10 10:26:38,934] INFO core_ai.audio_analyzer —     [~] Commencing Deepfake acoustic feature extraction (MFCCs, Spectral Centroids, Pitch)...
+[2026-06-10 10:27:26,660] INFO core_ai.audio_analyzer —     [+] Feature extraction successful! Evaluating heuristic threat rules...
+[2026-06-10 10:27:26,670] WARNING django.request — Not Found: /favicon.ico
+[2026-06-10 10:27:26,672] INFO core_ai.audio_analyzer —     [~] Analyzing MFCC variance for TTS vocoder signatures...
+[2026-06-10 10:27:26,675] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 2860
+[2026-06-10 10:27:26,678] INFO core_ai.audio_analyzer —     [~] Evaluating delta energy prosody algorithms...
+[2026-06-10 10:27:26,690] INFO core_ai.audio_analyzer —     [~] Cross-referencing pitch range against human baselines...
+[2026-06-10 10:27:26,695] INFO api.views —     [!] AUDIO RISK EVALUATION: 26.14%
+[2026-06-10 10:27:26,700] INFO api.views — 
+>>> STEP 3: FUSING MULTI-MODAL METRICS
+[2026-06-10 10:27:26,755] INFO api.views —     [+] Score Fusion Engine returned normalized threat value: 26%
+[2026-06-10 10:27:26,757] INFO core_ai.verdict — Verdict: SAFE (score=26%)
+[2026-06-10 10:27:26,902] INFO api.views —     [+] Forensics data committed to audit log.
+[2026-06-10 10:27:26,905] INFO api.views — ============================================================
+[2026-06-10 10:27:26,958] INFO api.views — ============================================================
+
+[2026-06-10 10:28:15,903] INFO api.views — 
+============================================================
+[2026-06-10 10:28:16,050] INFO api.views — ============================================================
+[2026-06-10 10:28:16,082] INFO api.views — [+] Connection securely established from IP: 127.0.0.1
+[2026-06-10 10:28:16,085] INFO api.views — [+] Payload specs — Audio Attached: False | Transcript Attached: True
+[2026-06-10 10:28:16,087] INFO api.views — 
+>>> STEP 2: INITIALIZING NLP THREAT DETECTION
+[2026-06-10 10:28:16,094] INFO api.views —     [+] Routing transcript to TextRiskAnalyzer...
+[2026-06-10 10:28:16,102] INFO core_ai.text_analyzer —     [~] Target sequence parsed. Waking up NLP Pipeline (facebook/bart-large-mnli)...
+[2026-06-10 10:29:36,280] INFO httpx — HTTP Request: HEAD https://huggingface.co/facebook/bart-large-mnli/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-10 10:29:36,283] WARNING huggingface_hub.utils._http — Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[2026-06-10 10:29:36,335] INFO httpx — HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/facebook/bart-large-mnli/d7645e127eaf1aefc7862fd59a17a5aa8558b8ce/config.json "HTTP/1.1 200 OK"
+[2026-06-10 10:29:42,474] INFO httpx — HTTP Request: GET https://huggingface.co/api/models/facebook/bart-large-mnli/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+[2026-06-10 10:29:42,785] INFO httpx — HTTP Request: GET https://huggingface.co/api/models/facebook/bart-large-mnli/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+[2026-06-10 10:29:44,566] INFO core_ai.text_analyzer —     [+] Pipeline active! Cross-referencing 7 known cybercrime vectors...
+[2026-06-10 10:30:25,202] INFO core_ai.text_analyzer —     [!] NLP Primary Match: 'BANK FRAUD' (Confidence: 0.61)
+[2026-06-10 10:30:25,207] INFO api.views —     [!] NLP INTENT RISK EVALUATION: 93.93%
+[2026-06-10 10:30:25,209] INFO api.views — 
+>>> STEP 3: FUSING MULTI-MODAL METRICS
+[2026-06-10 10:30:25,279] INFO api.views —     [+] Score Fusion Engine returned normalized threat value: 94%
+[2026-06-10 10:30:25,280] INFO core_ai.verdict — Verdict: CRITICAL FRAUD (score=94%)
+[2026-06-10 10:30:25,797] INFO api.views —     [+] Forensics data committed to audit log.
+[2026-06-10 10:30:25,799] INFO api.views — ============================================================
+[2026-06-10 10:30:26,144] INFO api.views — ============================================================
+
+[2026-06-10 10:31:47,920] INFO api.views — 
+============================================================
+[2026-06-10 10:31:48,083] INFO api.views — ============================================================
+[2026-06-10 10:31:48,158] DEBUG api.serializers — Audio file validated: recording.webm (342025 bytes)
+[2026-06-10 10:31:48,160] INFO api.views — [+] Connection securely established from IP: 127.0.0.1
+[2026-06-10 10:31:48,161] INFO api.views — [+] Payload specs — Audio Attached: True | Transcript Attached: False
+[2026-06-10 10:31:48,163] INFO api.views — 
+>>> STEP 1: INITIALIZING AUDIO FORENSICS ENGINE
+[2026-06-10 10:31:48,214] INFO api.views —     [+] Audio stream saved to secure vault: recording.webm
+[2026-06-10 10:31:48,248] INFO api.views —     [+] Routing stream to Librosa AudioRiskAnalyzer...
+[2026-06-10 10:31:48,280] INFO core_ai.audio_analyzer —     [~] Resampling audio stream to 16,000 Hz telephony standard...
+[2026-06-10 10:31:48,494] ERROR api.views — Audio analysis failed: Could not load audio file: 
+Traceback (most recent call last):
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\librosa\core\audio.py", line 176, in load
+    y, sr_native = __soundfile_load(path, offset, duration, dtype)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\librosa\core\audio.py", line 209, in __soundfile_load
+    context = sf.SoundFile(path)
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\soundfile.py", line 690, in __init__
+    self._file = self._open(file, mode_int, closefd)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\soundfile.py", line 1265, in _open
+    raise LibsndfileError(err, prefix="Error opening {0!r}: ".format(self.name))
+soundfile.LibsndfileError: Error opening 'D:\\repo clones\\VocalThreatDefender\\media\\uploads\\tmpv52kyi2b.webm': Format not recognised.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\repo clones\VocalThreatDefender\core_ai\audio_analyzer.py", line 42, in analyze
+    audio, sr = librosa.load(str(path), sr=TARGET_SR, mono=True)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\librosa\core\audio.py", line 184, in load
+    y, sr_native = __audioread_load(path, offset, duration, dtype)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\decorator\__init__.py", line 247, in fun
+    return caller(func, *(extras + args), **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\librosa\util\decorators.py", line 63, in __wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\librosa\core\audio.py", line 240, in __audioread_load
+    reader = audioread.audio_open(path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\audioread\__init__.py", line 131, in audio_open
+    raise NoBackendError()
+audioread.exceptions.NoBackendError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\repo clones\VocalThreatDefender\api\views.py", line 99, in post
+    result = _audio_analyzer.analyze(tmp_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\core_ai\audio_analyzer.py", line 44, in analyze
+    raise ValueError(f"Could not load audio file: {exc}") from exc
+ValueError: Could not load audio file: 
+[2026-06-10 10:31:50,921] WARNING django.request — Unprocessable Entity: /api/analyze/
+[2026-06-10 10:31:50,925] WARNING django.server — "POST /api/analyze/ HTTP/1.1" 422 62
+[2026-06-10 10:32:08,051] INFO api.views — 
+============================================================
+[2026-06-10 10:32:08,294] INFO api.views — ============================================================
+[2026-06-10 10:32:08,312] DEBUG api.serializers — Audio file validated: recording.webm (342025 bytes)
+[2026-06-10 10:32:08,327] INFO api.views — [+] Connection securely established from IP: 127.0.0.1
+[2026-06-10 10:32:08,328] INFO api.views — [+] Payload specs — Audio Attached: True | Transcript Attached: False
+[2026-06-10 10:32:08,405] INFO api.views — 
+>>> STEP 1: INITIALIZING AUDIO FORENSICS ENGINE
+[2026-06-10 10:32:08,428] INFO api.views —     [+] Audio stream saved to secure vault: recording.webm
+[2026-06-10 10:32:08,460] INFO api.views —     [+] Routing stream to Librosa AudioRiskAnalyzer...
+[2026-06-10 10:32:08,475] INFO core_ai.audio_analyzer —     [~] Resampling audio stream to 16,000 Hz telephony standard...
+[2026-06-10 10:32:09,108] ERROR api.views — Audio analysis failed: Could not load audio file: 
+Traceback (most recent call last):
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\librosa\core\audio.py", line 176, in load
+    y, sr_native = __soundfile_load(path, offset, duration, dtype)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\librosa\core\audio.py", line 209, in __soundfile_load
+    context = sf.SoundFile(path)
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\soundfile.py", line 690, in __init__
+    self._file = self._open(file, mode_int, closefd)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\soundfile.py", line 1265, in _open
+    raise LibsndfileError(err, prefix="Error opening {0!r}: ".format(self.name))
+soundfile.LibsndfileError: Error opening 'D:\\repo clones\\VocalThreatDefender\\media\\uploads\\tmpczpo441p.webm': Format not recognised.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\repo clones\VocalThreatDefender\core_ai\audio_analyzer.py", line 42, in analyze
+    audio, sr = librosa.load(str(path), sr=TARGET_SR, mono=True)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\librosa\core\audio.py", line 184, in load
+    y, sr_native = __audioread_load(path, offset, duration, dtype)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\decorator\__init__.py", line 247, in fun
+    return caller(func, *(extras + args), **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\librosa\util\decorators.py", line 63, in __wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\librosa\core\audio.py", line 240, in __audioread_load
+    reader = audioread.audio_open(path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\venv\Lib\site-packages\audioread\__init__.py", line 131, in audio_open
+    raise NoBackendError()
+audioread.exceptions.NoBackendError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\repo clones\VocalThreatDefender\api\views.py", line 99, in post
+    result = _audio_analyzer.analyze(tmp_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\repo clones\VocalThreatDefender\core_ai\audio_analyzer.py", line 44, in analyze
+    raise ValueError(f"Could not load audio file: {exc}") from exc
+ValueError: Could not load audio file: 
+[2026-06-10 10:32:09,125] WARNING django.request — Unprocessable Entity: /api/analyze/
+[2026-06-10 10:32:09,139] WARNING django.server — "POST /api/analyze/ HTTP/1.1" 422 62
